@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "New car notifier",
+  "description": "This extension notify when new car is created on ab.onliner.by",
+  "version": "0.1",
+  "browser_action": {
+    "default_icon": "car.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "notifications",
+    "alarms",
+    "http://ab.onliner.by/",
+    "https://content.onliner.by/"
+  ],
+  "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+  }
+}
