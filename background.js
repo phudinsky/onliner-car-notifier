@@ -11,6 +11,9 @@ chrome.storage.sync.get({
         });
 
         chrome.alarms.onAlarm.addListener(alarm => {
+            if (alarm.name !== "checkCars") {
+                return;
+            }
             fetchAds(settings.url).then(processAds);
         });
 
