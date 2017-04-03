@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+    <title>Settings page</title>
+
+    <style>
+        body {
+            padding: 10px;
+            font-size: 12px;
+        }
+
+        input {
+            width: 100%;
+        }
+
+        label {
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        #status {
+            color: green;
+            position: absolute;
+        }
+
+        .button-container {
+            text-align: center;
+        }
+
+        .row {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row">
+        <label for="url">Input url after selecting all required filters: </label>
+        <input id="url" type="text" name="url"/>
+    </div>
+    <div class="row button-container">
+        <button id="save">Save</button>
+    </div>
+
+    <div id="status"></div>
+
+    <script src="options.js"></script>
+</body>
+</html>
+

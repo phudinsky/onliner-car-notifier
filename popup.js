@@ -1,16 +1,24 @@
 const CACHE_KEY_FOR_LAST_DATE = 'popup_last_date';
 
 document.addEventListener('DOMContentLoaded', function() {
-    fetch("http://ab.onliner.by/search", {
-        method: 'POST',
-        headers: {
-            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
-        },
-        body: 'max-price=16000&min-year=2011&seller_type[]=1&currency=USD&sort[]=creation_date&page=1'
-    })
-        .then(r => r.json())
-        .then(processResponse)
-        .catch(console.log.bind(console));
+    chrome.storage.sync.get('url', items => {
+        const url = items.url;
+
+        if (url) {
+            const params = (url.indexOf("#") === false) ? null : url.split('#')[1];
+
+            fetch("http://ab.onliner.by/search", {
+                method: 'POST',
+                headers: {
+                    "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+                },
+                body: params
+            })
+                .then(r => r.json())
+                .then(processResponse)
+                .catch(console.log.bind(console));
+        }
+    });
 });
 
 function processResponse(response) {

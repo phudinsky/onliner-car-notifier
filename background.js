@@ -1,21 +1,27 @@
 const CACHE_KEY_FOR_LAST_DATE = 'notifier_last_date';
 
-chrome.alarms.create("checkCars", {
-    when: Date.now() + 3000,
-    periodInMinutes: 1
-});
+chrome.storage.sync.get('url', items => {
+    const url = items.url;
 
-chrome.alarms.onAlarm.addListener(alarm => {
-    fetchAds().then(processAds);
-});
+    if (url) {
+        chrome.alarms.create("checkCars", {
+            when: Date.now() + 3000,
+            periodInMinutes: 1
+        });
 
-chrome.notifications.onClicked.addListener(notificationId => {
-    chrome.tabs.create({ url: buildCarPageUrl(notificationId) });
+        chrome.alarms.onAlarm.addListener(alarm => {
+            fetchAds(url).then(processAds);
+        });
+
+        chrome.notifications.onClicked.addListener(notificationId => {
+            chrome.tabs.create({url: buildCarPageUrl(notificationId)});
+        });
+    }
 });
 
 function processAds(ads) {
     console.log('process', ads);
-    
+
     const lastDate = window.localStorage.getItem(CACHE_KEY_FOR_LAST_DATE);
     for (let id in ads) {
         let ad = ads[id];
@@ -52,25 +58,16 @@ function createNotificationForAd(ad) {
     });
 }
 
-function fetchAds() {
-    // todo: should be configurable
-    const params = [
-       ['max-price', 16000],
-       ['min-year', 2011],
-       ['seller_type[]', 1],
-       ['currency', 'USD'],
-       ['sort[]', 'creation_date'],
-       ['page', 1],
-    ];
-    const body = params.map(param => param.join('=')).join('&');
+function fetchAds(url) {
+    const params = (url.indexOf("#") === false) ? null : url.split('#')[1];
 
     return fetch("http://ab.onliner.by/search", {
-            method: 'POST',
-            headers: {
-                "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
-            },
-            body: body
-        })
+        method: 'POST',
+        headers: {
+            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+        },
+        body: params
+    })
         .then(r => r.json())
         .then(r => r.result.advertisements)
         .catch(console.log.bind(console))

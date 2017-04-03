@@ -7,14 +7,21 @@
     "default_icon": "car.png",
     "default_popup": "popup.html"
   },
+  "options_ui": {
+    "page": "options/options.html",
+    "chrome_style": true
+  },
   "permissions": [
     "notifications",
     "alarms",
+    "storage",
     "http://ab.onliner.by/",
     "https://content.onliner.by/"
   ],
   "background": {
-      "scripts": ["background.js"],
-      "persistent": false
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
   }
 }
