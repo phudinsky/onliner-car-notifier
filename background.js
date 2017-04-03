@@ -1,16 +1,17 @@
 const CACHE_KEY_FOR_LAST_DATE = 'notifier_last_date';
 
-chrome.storage.sync.get('url', items => {
-    const url = items.url;
-
-    if (url) {
+chrome.storage.sync.get({
+    url: '',
+    fetchInterval: 1,
+}, settings => {
+    if (settings.url) {
         chrome.alarms.create("checkCars", {
             when: Date.now() + 3000,
-            periodInMinutes: 1
+            periodInMinutes: settings.fetchInterval
         });
 
         chrome.alarms.onAlarm.addListener(alarm => {
-            fetchAds(url).then(processAds);
+            fetchAds(settings.url).then(processAds);
         });
 
         chrome.notifications.onClicked.addListener(notificationId => {
